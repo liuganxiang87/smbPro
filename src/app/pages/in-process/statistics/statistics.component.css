@@ -1,0 +1,22 @@
+.s_row {
+  width: 100%;
+}
+
+
+
+.s_col {
+  width: 25%;
+  float: left;
+  text-align: center;
+  margin-top: 2em;
+
+}
+
+.s_col h1 {
+  font-size: 24px;
+}
+
+.s_col p {
+  font-size: 20px;
+
+}

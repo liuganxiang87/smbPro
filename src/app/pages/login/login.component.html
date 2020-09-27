@@ -1,0 +1,52 @@
+<div id="container">
+  <div id="output">
+    <div class="containerT">
+      <div class="login-box">
+        <h1 class="login_title">共青城基金小镇业务平台</h1>
+        <div class="login-body">
+          <h3 class="login_des"><span>手机号登录</span></h3>
+          <form nz-form [formGroup]="loginForm" (ngSubmit)="_submitForm()">
+            <nz-form-item>
+              <nz-form-control nzErrorTip="请输入正确的手机号">
+                <nz-input-group nzPrefixIcon="user">
+                  <input formControlName="loginTel" nz-input required type="tel" placeholder="手机号" type="tel" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-control nzErrorTip="密码不正确">
+                <nz-input-group nzPrefixIcon="lock">
+                  <input formControlName="loginPwd" nz-input required type="password" placeholder="密码" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+              <nz-form-control [nzErrorTip]="codeErrorTpl">
+                <div nz-row [nzGutter]="8">
+                  <div nz-col [nzSpan]='16'>
+                    <input formControlName="loginCode" nz-input type='password' placeholder='验证码（6位）' maxlength="7"
+                      required autocomplete="off" />
+                  </div>
+                  <div nz-col [nzSpan]='8'>
+                    <button nz-button (click)="getCaptcha($event)" class="getcodebt" [disabled]="!sendFlag"> <span
+                        *ngIf='sendFlag'>获取验证码</span><span *ngIf='!sendFlag'>{{countDownNum}}s</span> </button>
+                  </div>
+                </div>
+                <ng-template #codeErrorTpl let-control>
+                  请正确输入验证码
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-control>
+                <button nz-button nzBlock [nzType]="'primary'" [disabled]="loginForm&&!(loginForm.valid)"
+                  class="loginbt">登录</button>
+              </nz-form-control>
+            </nz-form-item>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,47 @@
+<nz-layout class="app-layout">
+  <nz-sider class="menu-sidebar" nzCollapsible nzWidth="256px" nzBreakpoint="md" [(nzCollapsed)]="isCollapsed"
+    [nzCollapsible]='"true"' [nzTrigger]="null">
+    <div class="sidebar-logo">
+      <a href="https://ng.ant.design/" target="_blank">
+        <img src="../../../assets/images/logo.png" alt="logo">
+        <h1>{{ logoName }}</h1>
+      </a>
+    </div>
+    <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
+      <ng-container *ngFor='let item of MENUS'>
+        <!-- *ngIf='item.isShow' -->
+        <li nz-submenu [nzTitle]="item.title" [nzIcon]="item.icon">
+          <ul>
+            <li nz-menu-item nzMatchRouter *ngFor='let sub of item.children'>
+              <a [routerLink]="sub.link">{{sub.text}}</a>
+            </li>
+          </ul>
+        </li>
+
+      </ng-container>
+
+      <li nz-submenu nzTitle="个人中心" nzIcon="form">
+        <ul>
+          <li nz-menu-item nzMatchRouter (click)='logout()'>
+            <a>退出登录</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </nz-sider>
+  <nz-layout>
+    <nz-header>
+      <div class="app-header">
+        <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
+          <i class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
+        </span>
+      </div>
+    </nz-header>
+
+    <nz-content>
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+  </nz-layout>
+</nz-layout>

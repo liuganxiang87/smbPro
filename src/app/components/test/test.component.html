@@ -1,0 +1,6 @@
+<p>demo works!</p>
+<div>我是子组件<span>{{we}}</span>
+  <input nz-input type='text' [(ngModel)]="zi" placeholder="向父组件传递内容">
+  <ng-content></ng-content><br>
+  <button nz-button nzType='primary' (click)='emit()'>子组件发送信息</button>
+</div>

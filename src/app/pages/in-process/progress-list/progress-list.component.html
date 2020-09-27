@@ -1,0 +1,51 @@
+<app-header-search [bfcs]="bfcs$ | async" showSearchBt='"true"' (submitForm)="_submitForm($event)"></app-header-search>
+
+
+<nz-table #setUpTable [nzData]="list" nzShowPagination=false [nzPageSize]='_page.size' nzSize="small">
+  <thead>
+    <tr>
+      <th>客户名称</th>
+      <th>类型</th>
+      <th>企业架构</th>
+      <th>当前状态</th>
+      <th>客户经理</th>
+      <th>客户经理手机</th>
+      <th>创建时间</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of setUpTable.data;let index=index">
+      <td>{{item.customer_name}}</td>
+      <td>{{item.biz_type|bizType}}</td>
+      <!-- {{item.biz_type|curStep:item.current_step_id}} -->
+      <td>{{item.biz_type|curStep:item.current_step_id}}</td>
+      <td>{{item.docking?item.docking.R_person_name:'未分配'}}</td>
+      <td>{{item.worker?item.worker.w_name:'--'}}</td>
+      <td>{{ item.worker ? item.worker.w_phone : "--"}}</td>
+      <td>{{ item.begin_time | date : 'yyyy-MM-dd'}}</td>
+      <td>
+        <a nz-dropdown [nzDropdownMenu]="menu"> 操作 </a>
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+          <ul nz-menu nzSelectable>
+            <li nz-menu-item (click)="operate(index,1)">查看</li>
+            <li nz-menu-item>生成文件
+            </li>
+            <li nz-menu-item>任务取消</li>
+            <li nz-menu-item>数据修改</li>
+            <li nz-menu-item>授权客户修改</li>
+          </ul>
+        </nz-dropdown-menu>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+
+
+<app-pagination (pageIndexChange)="_pageIndexChange($event)" [page]="_page"></app-pagination>
+<!-- <ng-container *ngIf="bussinessLicenseWritePop_isShow">
+  <app-bussiness-license-write-pop [ModalTitle]='_ModalTitle' [_fileList]="_fileList" (touchOk)="_touchOk($event)"
+    (touchCancel)="_touchCancel($event)" [nzOkDisabled]='_nzOkDisabled' [curObj]="_curObj">
+  </app-bussiness-license-write-pop>
+</ng-container> -->

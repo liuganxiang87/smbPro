@@ -1,0 +1,9 @@
+.source-modal nz-select {
+  margin: 0 8px 10px 0;
+  width: 160px;
+}
+
+/* .ant-checkbox-disabled /deep/ .ant-checkbox-inner {
+  background-color: #1890ff;
+  border-color: #1890ff;
+} */

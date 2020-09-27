@@ -1,0 +1,46 @@
+<div class="button-div">
+  <button nz-button nzType='primary' class="addPartner" (click)="add()">新增股东</button>
+  <button nz-button nzType='primary' class="importList">导入股东列表</button>
+</div>
+
+
+<nz-table #progressListTable [nzData]="progress.partner" nzShowPagination=false [nzPageSize]='_page.size'
+  [nzSize]='"small"'>
+  <thead>
+    <tr>
+      <th>名称</th>
+      <th>合伙人类型</th>
+      <th>证件类型</th>
+      <th>证件号码</th>
+      <th>电话</th>
+      <th>出资方式</th>
+      <th>认缴资金</th>
+      <th>实缴资金</th>
+      <th>缴付期限</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <tr *ngFor="let data of progressListTable.data ;let index=index">
+      <td>{{ data.partner_name }}</td>
+      <td>--</td>
+      <td>--</td>
+      <td>{{ data.partner_id_or_org_id }}</td>
+      <td>{{ data.partner_phone_num }}</td>
+      <td></td>
+      <td>{{ data.partner_registered_capital | number : "1.0-4" }} 万</td>
+      <td>{{ data.partner_paid_in_captial | number : "1.0-4" }} 万</td>
+      <td>{{ data.partner_investment_date | date : 'yyyy-MM-dd'}}</td>
+      <td> <button nz-button nzType="primary" class="modify(index)">修改</button><button nz-button nzType='default'
+          class="del-button" class="del(index)">删除</button> </td>
+    </tr>
+  </tbody>
+
+</nz-table>
+
+
+<ng-container *ngIf="isShowModal">
+  <app-add-partner [progress]='progress' [partner_index]="cur_partner_index" (touchOk)='_touchOk($event)'
+    (touchCancel)='_touchCancel()'></app-add-partner>
+</ng-container>

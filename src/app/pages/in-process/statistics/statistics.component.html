@@ -1,0 +1,6 @@
+<div class="s_row">
+  <div class="s_col" *ngFor="let item of list " (click)="routerFun(item.biz_type)">
+    <h1>{{item.biz_type|bizType}}</h1>
+    <p>{{item.count}}家</p>
+  </div>
+</div>

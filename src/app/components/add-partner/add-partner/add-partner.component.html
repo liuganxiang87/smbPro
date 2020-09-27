@@ -1,0 +1,12 @@
+<nz-modal [(nzVisible)]="isVisible" [nzTitle]="ModalTitle" [nzOkText]="nzOkText" [nzCancelText]="nzCancelText"
+  [nzWidth]='"720"' (nzOnOk)="handleOk()" (nzOnCancel)="handleCancel()" [nzOkDisabled]='nzOkDisabled'>
+  <div class="baseInfoForm">
+    <ng-container *ngIf="isPerson">
+      <app-form-hor-partner #partnerForm [bfcs]='bfcs$ | async' (submitForm)="_submitForm($event)"
+        (formModelChange)="_formModelChange($event)"></app-form-hor-partner>
+    </ng-container>
+  </div>
+
+
+
+</nz-modal>

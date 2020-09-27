@@ -1,0 +1,26 @@
+.button_save {
+  width: 100%;
+  /* background: #fcc; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button_save button {
+  min-width: 10em;
+  margin: 0.5em;
+}
+
+i[nz-icon] {
+  font-size: 32px;
+  color: #999;
+}
+
+.ant-upload-text {
+  margin-top: 8px;
+  color: #666;
+}
+
+.preview-div {
+  padding: 1em;
+}

@@ -1,0 +1,138 @@
+<nz-modal [(nzVisible)]="isVisible" nzTitle="选择客户来源" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" nzMask='true'
+  [nzWidth]="840">
+
+
+  <div class="source-modal">
+    <form nz-form [nzLayout]="'inline'">
+      <nz-form-item>
+        <nz-form-label>客户来源</nz-form-label>
+        <nz-form-control nzValidateStatus="success">
+          <!--  (ngModelChange)='onSearch()'   nzAllowClear -->
+          <nz-select name="select-validate" [(ngModel)]="fromSource.bigClass.id" (ngModelChange)='onSelected()'>
+            <nz-option *ngFor="let item of SourceArr" [nzValue]="item.id" [nzLabel]="item.text">{{item.text}}
+            </nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <ng-container *ngIf="fromSource.bigClass.id==3||fromSource.bigClass.id==4||fromSource.bigClass.id==5">
+        <nz-form-item>
+          <nz-form-label>名称</nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <input nz-input placeholder="请输入姓名" [(ngModel)]="name" [ngModelOptions]="{standalone:true}" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item *ngIf='fromSource.bigClass.id!=5'>
+          <nz-form-label>电话号码</nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <input nz-input placeholder="请输入电话号码" type='number' [(ngModel)]="phone"
+                [ngModelOptions]="{standalone:true}" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item *ngIf='fromSource.bigClass.id==5'>
+          <nz-form-label>证件号码</nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <input nz-input placeholder="请输入证件号码" [(ngModel)]="idCode" [ngModelOptions]="{standalone:true}" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </ng-container>
+
+
+      <nz-form-item
+        *ngIf='fromSource.bigClass.id&&!(fromSource.bigClass.id==1||fromSource.bigClass.id==2||fromSource.bigClass.id==6)'>
+        <nz-form-control>
+          <button nz-button nzType="primary" (click)="search_source()" [nzLoading]="requestFlag"><i nz-icon
+              nzType="search" nzTheme="outline"></i></button>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </div>
+
+  <!-- 客户经理table-->
+  <ng-container *ngIf='fromSource.bigClass.id==3'>
+    <nz-table #nzTable_source [nzData]="dataSet" [nzSize]='"small"' [nzPageSize]='fromSource.size'
+      (nzPageIndexChange)="nzPageIndexChange($event)">
+      <thead>
+        <tr>
+          <th></th>
+          <th>姓名</th>
+          <th>手机</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- (nzCheckedChange)="nzCheckedChange(index)"  [nzDisabled]='"true"'  -->
+        <tr *ngFor="let data of nzTable_source.data; let index=index">
+          <td class="checked-td" [(nzChecked)]="data.checked" [nzShowCheckbox]='"true"'
+            (nzCheckedChange)='nzCheckedChange(0,index)'></td>
+
+          <td (click)="nzCheckedChange(1,index)">{{ data.w_name }}</td>
+          <td (click)="nzCheckedChange(1,index)">{{ data.w_phone }}</td>
+
+
+        </tr>
+      </tbody>
+    </nz-table>
+  </ng-container>
+  <!--渠道推荐 nzBordered -->
+  <ng-container *ngIf='fromSource.bigClass.id==5'>
+    <nz-table #nzTable_source2 [nzData]="dataSet2" [nzPageSize]="10">
+      <thead>
+        <tr>
+          <!-- <th></th> -->
+          <th>序号</th>
+          <th>渠道名称</th>
+          <th>证件号码</th>
+          <th>渠道联络员</th>
+          <th>渠道推荐人</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of nzTable_source2.data ;let ix=index" (click)="set2_nzCheckedChange(1,ix)">
+          <td>{{ix+1}}</td>
+          <td>{{ data.name }}</td>
+          <td>{{ data.id_num }}</td>
+          <td>{{data.defaultLiaison ? data.defaultLiaison.name : ''}}</td>
+          <td>{{data.referrer_name}}</td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </ng-container>
+
+
+
+
+
+  <!-- 客户推荐 -->
+  <ng-container *ngIf='fromSource.bigClass.id==4'>
+    <nz-table #nzTable_source3 [nzData]="dataSet3" [nzSize]='"small"' [nzPageSize]="10">
+      <thead>
+        <tr>
+          <th></th>
+          <th>客户名称</th>
+          <th>客户手机</th>
+          <th>单位名称</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of nzTable_source3.data ;let index3=index">
+
+          <td class="checked-td" [(nzChecked)]="data.checked" [nzShowCheckbox]='"true"'
+            (nzCheckedChange)='set3_nzCheckedChange(0,index3)'></td>
+
+          <td (click)='set3_nzCheckedChange(1,index3)'>{{ data.c_person_name }}</td>
+          <td (click)='set3_nzCheckedChange(1,index3)'>{{ data.c_mobilephone }}</td>
+          <td (click)='set3_nzCheckedChange(1,index3)'>{{data.c_employer}}</td>
+
+        </tr>
+      </tbody>
+    </nz-table>
+  </ng-container>
+
+</nz-modal>

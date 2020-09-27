@@ -1,0 +1,58 @@
+<nz-modal [(nzVisible)]="display" nzTitle="选择联络人" [nzFooter]="modalFooter" (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()" [nzOkText]="null" [nzWidth]="800" [nzZIndex]="2">
+  <form nz-form [nzLayout]="'inline'">
+    <nz-form-item>
+      <nz-form-label>联络人姓名</nz-form-label>
+      <nz-form-control>
+        <nz-input-group>
+          <input nz-input placeholder="请输入联络人姓名" name="selName" [(ngModel)]="selName" />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label>联络人电话</nz-form-label>
+      <nz-form-control>
+        <nz-input-group>
+          <input nz-input placeholder="请输入联络人电话" name="selPhone" [(ngModel)]="selPhone" />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control>
+        <button nz-button nzType="primary" (click)="getCustomerPersons()" [nzLoading]="requestFlag"><i nz-icon
+            nzType="search" nzTheme="outline"></i></button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+  <nz-table #personTable [nzData]="personList" [nzPageSize]="size" [nzPageIndex]="page" [nzLoading]="requestFlag"
+    [nzSize]="'small'" nzHideOnSinglePage>
+    <thead>
+      <tr>
+        <th>序号</th>
+        <th>联络人姓名</th>
+        <th>联络人手机</th>
+        <th>客户名称</th>
+        <th>客户主体资格证明号码</th>
+        <th>创建时间</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of personTable.data; let i = index;">
+        <td>{{ i + 1 }}</td>
+        <td>{{ data.c_person_name }}</td>
+        <td>{{ data.c_mobilephone }}</td>
+        <td>{{ data.c_employer }}</td>
+        <td>{{ data.c_org_id }}</td>
+        <td>{{ data.c_create_datetime | date: 'yyyy-MM-dd'}}</td>
+        <td> <a (click)="choose(data)">选择</a> </td>
+      </tr>
+    </tbody>
+  </nz-table>
+  <nz-pagination (nzPageIndexChange)="getCustomerPersons($event)" [nzPageIndex]="page" [nzTotal]="count"
+    [nzDisabled]="requestFlag" [(nzPageSize)]="size" nzShowQuickJumper nzHideOnSinglePage class="pagination">
+  </nz-pagination>
+  <br>
+  <ng-template #modalFooter>
+  </ng-template>
+</nz-modal>
