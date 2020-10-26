@@ -12,6 +12,7 @@ import { CustomerPersonModel } from "./CustomerPerson.Model";
 import { CustomerOrderModel } from "./CustomerOrder.Model";
 import { CustomerPreDemandModel } from './CustomerPreDemand.Model';
 import { CustomerMoveBeforeModel } from './CustomerMoveBefore.Model';
+import { BankModel } from './Bank.Model';
 
 export class CustomerInProgressModel {
   public customer_org_reg_sid: number; // 正在办理机构的机构客户序列号，企业变更，机构ID（社会信用代码）不变，但多了一个临时序列号
@@ -107,22 +108,25 @@ export class CustomerInProgressModel {
   public fileFund: FileFundPartnerModel = new FileFundPartnerModel();         //基金通用
   public fileCompany: FileCompanyModel = new FileCompanyModel();              //有限公司通用
   public order: CustomerOrderModel[] = [];
-  public moveBefore: CustomerMoveBeforeModel = new CustomerMoveBeforeModel()
+  public moveBefore: CustomerMoveBeforeModel = new CustomerMoveBeforeModel();
+  public allBank: BankModel[] = [];
   //辅助字段
   public orderPeriodToEnd: boolean = true; //企业委托期限是否是至企业注销 （即委托期限结束日期=企业注销日期）
 
   public personPageDisplay: boolean = false; //选择客户页面是否显示
   public workerPageDispaly: boolean = false; //选择员工页面是否显示
-  public values: any[] = [];
+
   public customerFromSource: customerFromSourceModel = new customerFromSourceModel();
   public nzOptions: any[] = [];
+  public values: any[] = [];
   public preDemand: CustomerPreDemandModel = new CustomerPreDemandModel();
 
   public type: number = 1;   //数据类型  1.设立数据类型 2.迁转数据类型 3.迁入数据类型
   public businessPeriod: number = 30; //企业经营期限
   public businessPeriodInfinite: boolean = false; //经营期限 是否无限
   public small_class: number[] = [4533];
-  public org_big_type_options: any[] = []   //企业类型选项
+  public org_big_type_options: any[] = []    //企业类型选项
+  public isDisabled: boolean = false;           //是否可编辑
 }
 
 export class customerFromSourceModel {
@@ -131,175 +135,6 @@ export class customerFromSourceModel {
   text: string;
 }
 
-export class CustomerInProgressHelper {
-  // 客户专员，员工号
-  public flag_worker_id: boolean = false;
-  public info_worker_id: string;
-  // 业务办理并直接掌控合伙企业的人
-  public flag_customer_person_id: boolean = false;
-  public info_customer_person_id: string;
-  //企业架构： 1、有限合伙，2、有限公司
-  public flag_org_structure: boolean = false;
-  public info_org_structure: string;
-  // 客户可注册的类别（1：投资类企业、2：总部企业、3：双创企业、4：其他企业）
-  public flag_org_class: boolean = false;
-  public info_org_class: string;
-
-  public flag_structure_detail: boolean = false;
-  public info_structure_detail: string = "请选择企业小类别";
-  // 企业类型：1=管 理 人 2=私募基金 3=员工持股（需要母公司） 4=股权改造（需要母公司） 5=产业投资 6=高管平台（需要母公司） 7=实业经营 8=政府基金 9=内部持股（需要母公司） 10=债权投资 11=并购投资 12=员工跟投（需要母公司） 13=创投企业 14=其他投资
-  public flag_org_type: boolean = false;
-  public info_org_type: string;
-  //企业类型（代替org_type）1:管理人 2:私募基金 4:持股平台 5:产业投资 7:投资服务 15:特殊载体 99:其他投资
-  public flag_org_big_type: boolean = false;
-  public info_org_big_type: string;
-  // 经营范围
-  public flag_scope_of_operation: boolean = false;
-  public info_scope_of_operation: string;
-  //企业经营期限
-  public flag_businessPeriod: boolean = false;
-  public info_businessPeriod: string;
-  //付款最后期限，通常=customer_org_end_date，当customer_org_end_date 为空时，需要客户填写
-  public flag_last_day_4_pay: boolean = false;
-  public info_last_day_4_pay: string;
-  // 合伙协议/公司章程模板： 1=普通合伙， 2=基金合伙， 3=普通有限公司  4=基金类公司（不提供）
-  public flag_agreement_templet: boolean = false;
-  public info_agreement_templet: string;
-  //投资方向：; //见表; //industry_focus
-  public flag_industry_focus: boolean = false;
-  public info_industry_focus: string;
-  // 基金投资方向：基金管理人： 1=证券投资管理 2=股权投资管理 3=创业投资管理 4=其他， 私募基金： 1=证券投资 2=股权投资 3=创业投资 4=其他
-  public flag_fund_focus: boolean = false;
-  public info_fund_focus: string;
-  // 注册地址
-  public flag_registered_address: boolean = false;
-  public info_registered_address: string;
-  // 开户银行的顺序号：见表 zone_bank 相应的银行列表 共青城：1=九江银行   2=中国银行   3=农业银行   4=建设银行   5=江西银行
-  public flag_bank_sid: boolean = false;
-  public info_bank_sid: string;
-  // 银行账号
-  public flag_bank_account: boolean = false;
-  public info_bank_account: string;
-  // 企业传真：订单协议需要
-  public flag_org_fax: boolean = false;
-  public info_org_fax: string;
-  // 员工个数
-  public flag_num_of_employee: boolean = false;
-  public info_num_of_employee: string;
-  // 管理人名称
-  public flag_administrant_name: boolean = false;
-  public info_administrant_name: string;
-  // 管理人编码：[Pnnnnnnn]
-  public flag_administrant_id: boolean = false;
-  public info_administrant_id: string;
-  //是否需要私募基金管理人登记辅导？T:; //是，; //F:; //否
-  public flag_if_registration_guidance: boolean = false;
-  public info_if_registration_guidance: string;
-  //是否聘用外部投资顾问。T：是，F:; //否
-  public flag_if_investment_adviser: boolean = false;
-  public info_if_investment_adviser: string;
-  // 投资顾问名称，协议里用
-  public flag_investment_adviser_name: boolean = false;
-  public info_investment_adviser_name: string;
-  // 投资顾问登记证书号码
-  public flag_adviser_certificate_id: boolean = false;
-  public info_adviser_certificate_id: string;
-  // 托管机构？ F=不需要指定机构  T=之后选择1=中信证券， 2=招商证券
-  public flag_if_trusteeship_org: boolean = false;
-  public info_if_trusteeship_org: string;
-  // 托管机构名称，私募基金才有
-  public flag_trusteeship_org_name: boolean = false;
-  public info_trusteeship_org_name: string;
-  // 是否开通银期转账服务？T: 是， F: 否
-  public flag_if_bank_futures_transfer: boolean = false;
-  public info_if_bank_futures_transfer: string;
-  // 银期转账服务机构：0=无需服务 1=中信证券， 2=招商证券
-  public flag_if_bank_futures_org: boolean = false;
-  public info_if_bank_futures_org: string;
-  // 是否开通银证转账服务？T: 是， F: 否
-  public flag_if_bank_securities_transfer: boolean = false;
-  public info_if_bank_securities_transfer: string;
-  // 银证转账服务机构： 0=无需服务  1=中信证券， 2=招商证券
-  public flag_if_bank_securities_org: boolean = false;
-  public info_if_bank_securities_org: string;
-  // 是否开通银行短信提醒业务？ T: 是， F: 否
-  public flag_if_short_message: boolean = false;
-  public info_if_short_message: string;
-  // 企业是否向园区移交秘钥（报税）: T: 是， F: 否
-  public flag_if_secret_key_2_town: boolean = false;
-  public info_if_secret_key_2_town: string;
-  // 是否开通银行理财账户:  T: 是， F: 否
-  public flag_if_financial_account: boolean = false;
-  public info_if_financial_account: string;
-  // 是否分页签署: T:是， F:否
-  public flag_if_paging_sign: boolean = false;
-  public info_if_paging_sign: string;
-  // 来源：0=<空> 1=网站注册 2=客户自主上门或联系 3=客户经理开发 4=客户推荐 5=渠道推荐 6=介绍人推荐
-  public flag_source: boolean = false;
-  public info_source: string;
-  // 最终确认的在园区将要设立或将要变成的企业名称
-  public flag_customer_name: boolean = false;
-  public info_customer_name: string;
-  // 是否一般户：T=是，F=否
-  public flag_if_general: boolean = false;
-  public info_if_general: string;
-  // 一般户银行机构
-  public flag_general_bank_branck: boolean = false;
-  public info_general_bank_branck: string;
-  // 一般户账号
-  public flag_bank_general_acct: boolean = false;
-  public info_bank_general_acct: string;
-  // 实际控制人证件URL
-  public flag_real_control_url: boolean = false;
-  public info_real_control_url: string;
-  //relationPerson 提示信息
-  public flag_RPerson_remind: boolean = false;
-  public info_RPerson_remind: string = "";
-
-  public check() {
-    return (
-      this.flag_worker_id ||
-      this.flag_customer_person_id ||
-      this.flag_org_structure ||
-      this.flag_org_class ||
-      this.flag_org_type ||
-      this.flag_scope_of_operation ||
-      this.flag_businessPeriod ||
-      this.flag_last_day_4_pay ||
-      this.flag_industry_focus ||
-      this.flag_fund_focus ||
-      this.flag_org_big_type ||
-      this.flag_registered_address ||
-      this.flag_bank_sid ||
-      this.flag_bank_account ||
-      this.flag_org_fax ||
-      this.flag_num_of_employee ||
-      this.flag_administrant_name ||
-      this.flag_administrant_id ||
-      this.flag_if_registration_guidance ||
-      this.flag_if_investment_adviser ||
-      this.flag_investment_adviser_name ||
-      this.flag_adviser_certificate_id ||
-      this.flag_if_trusteeship_org ||
-      this.flag_trusteeship_org_name ||
-      this.flag_if_bank_futures_transfer ||
-      this.flag_if_bank_futures_org ||
-      this.flag_if_bank_securities_transfer ||
-      this.flag_if_bank_securities_org ||
-      this.flag_if_short_message ||
-      this.flag_if_secret_key_2_town ||
-      this.flag_if_financial_account ||
-      this.flag_if_paging_sign ||
-      this.flag_source ||
-      this.flag_customer_name ||
-      this.flag_if_general ||
-      this.flag_general_bank_branck ||
-      this.flag_bank_general_acct ||
-      this.flag_real_control_url ||
-      this.flag_RPerson_remind
-    );
-  }
-}
 
 //银行信息
 export class BankInfo {
@@ -321,25 +156,7 @@ export class BusinessLicenseInfo {
   public businessLicenseUrl: string; //营业执照pdf
 }
 
-export class BusinessLicenseHelper {
-  //营业执照出证时间
-  public flag_businessLicenseNo: boolean = false;
-  public info_businessLicenseNo: string;
-  //营业执照号
-  public flag_startTime: boolean = false;
-  public info_startTime: string;
-  //营业执照pdf
-  public flag_businessLicenseUrl: boolean = false;
-  public info_businessLicenseUrl: string;
 
-  public check() {
-    return (
-      this.flag_businessLicenseNo ||
-      this.flag_startTime ||
-      this.flag_businessLicenseUrl
-    );
-  }
-}
 
 export const StatusArr = [
   { status: "T", text: "是" },
@@ -481,7 +298,7 @@ export const OrgBigTypeArrValue = [
 
 //合伙协议/公司章程模板
 export enum AgreementTemplet {
-  fileNotFund = "1",
+  fileNoFund = "1",
   fileFund = "2",
   fileCompany = "3"
 }

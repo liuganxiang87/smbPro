@@ -2,7 +2,7 @@
 import { BaseFormControls } from './base-form-controls';
 export class FormUpload extends BaseFormControls<string>{
     controlType = "upload";
-
+    nzValidateStatus: string;
     nzAction: any;
     nzListType: string;
     nzFileList: any[];
@@ -14,6 +14,7 @@ export class FormUpload extends BaseFormControls<string>{
     nzSize: number;
     constructor(options: {} = {}) {
         super(options);
+        this.nzValidateStatus = options['nzValidateStatus'] || 'success';
         this.nzAction = options['nzAction'] || null;
         this.nzListType = options['nzListType'] || 'picture-card';
         this.nzFileList = options['nzFileList'] || [];

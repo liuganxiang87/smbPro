@@ -5,7 +5,7 @@ import { BaseFormControls, FormDatePicker, FormDivider, FormDropdown, FormInputT
 import { FormUpload } from '../classes/form-upload';
 import { CustomerPartnerModel, PartnerIdType } from '../models';
 import { API } from '../tools/API';
-import { emailReg, raceArr, partnerIdType, educationArr, politicalArr, partnerFormOfInvestmentArr, companyTypes } from '../tools/global';
+import { emailReg, raceArr, partner_id_type, educationArr, politicalArr, partnerFormOfInvestmentArr, companyTypes } from '../tools/global';
 import { MyStorageService } from './my-storage.service';
 
 @Injectable({
@@ -15,20 +15,21 @@ import { MyStorageService } from './my-storage.service';
 export class FormPartnerTreeService {
   constructor(private mystor: MyStorageService) { }
   partnerControlsForm(partner: CustomerPartnerModel = new CustomerPartnerModel(), org_structure: string = '1') {
-    // console.log('@@@@@@@', org_structure, partner)
-    const certificate_val = partnerIdType[partner.partner_is_person_or_org][0].value;
-    const certificate_options = partnerIdType[partner.partner_is_person_or_org];
+
+    const certificate_val = partner_id_type[partner.partner_is_person_or_org][0].value;
+    const certificate_options = partner_id_type[partner.partner_is_person_or_org];
     // 是否填写负责人信息
-    const is_write_fzr = partner.partner_is_person_or_org == '1'
+    const is_write_fzr = partner.partner_is_person_or_org == '1';
+    // console.log('@@@@@@@', partner)
     let formData: BaseFormControls<string>[] = [
       new FormRadio({
         key: 'partner_is_person_or_org',
         label: `${org_structure == "1" ? '合伙人' : '股东'}类型`,
         radioType: 2,
         required: true,
-        value: '1',
         hor_label_nzSpan: 6,
         hor_control_nzSpan: 16,
+        value: partner.partner_is_person_or_org,
         options: companyTypes,
         order: 1
       }),
@@ -98,6 +99,7 @@ export class FormPartnerTreeService {
         required: true,
         hor_label_nzSpan: 6,
         hor_control_nzSpan: 16,
+        value: partner.partner_name,
         order: 6
       }),
       new FormInputText({
@@ -107,6 +109,7 @@ export class FormPartnerTreeService {
         required: true,
         hor_label_nzSpan: 6,
         hor_control_nzSpan: 16,
+        value: partner.partner_id_or_org_id,
         order: 7
       }),
       new FormInputText({
@@ -116,6 +119,7 @@ export class FormPartnerTreeService {
         required: true,
         hor_label_nzSpan: 6,
         hor_control_nzSpan: 16,
+        value: partner.partner_addr,
         order: 8
       }),
 
@@ -126,7 +130,7 @@ export class FormPartnerTreeService {
         hor_label_nzSpan: 6,
         hor_control_nzSpan: 16,
         width: '16em',
-        isHidden: partner.partner_id_type == PartnerIdType.idCard,
+        isHidden: partner.partner_id_type != PartnerIdType.idCard,
         required: true,
         value: partner.partner_race,
         options: raceArr,
@@ -137,10 +141,11 @@ export class FormPartnerTreeService {
         label: '文化程度', // '企业营业场所',
         radioType: 2,
         required: true,
-        isHidden: partner.partner_id_type == PartnerIdType.idCard,
+        isHidden: partner.partner_id_type != PartnerIdType.idCard,
         hor_label_nzSpan: 6,
         hor_control_nzSpan: 16,
         width: '16em',
+        value: partner.partner_education,
         options: educationArr,
         order: 10
       }),
@@ -149,11 +154,12 @@ export class FormPartnerTreeService {
         label: '政治面貌', // '企业营业场所',
         radioType: 2,
         required: true,
-        isHidden: partner.partner_id_type == PartnerIdType.idCard,
+        isHidden: partner.partner_id_type != PartnerIdType.idCard,
         width: '16em',
         hor_label_nzSpan: 6,
         hor_control_nzSpan: 16,
         options: politicalArr,
+        value: partner.partner_political,
         order: 11
       }),
       new FormInputText({
@@ -163,6 +169,7 @@ export class FormPartnerTreeService {
         required: true,
         hor_label_nzSpan: 6,
         hor_control_nzSpan: 16,
+        value: partner.partner_phone_num,
         order: 12
       }),
       new FormInputText({
@@ -173,6 +180,7 @@ export class FormPartnerTreeService {
         required: true,
         hor_label_nzSpan: 6,
         hor_control_nzSpan: 16,
+        value: partner.partner_mail_box,
         order: 13
       }),
       new FormRadio({
@@ -195,6 +203,7 @@ export class FormPartnerTreeService {
         addOnAffter: '万元',
         hor_label_nzSpan: 6,
         hor_control_nzSpan: 16,
+        value: partner.partner_registered_capital,
         order: 15
       }),
       new FormInputText({
@@ -204,6 +213,7 @@ export class FormPartnerTreeService {
         addOnAffter: '万元',
         hor_label_nzSpan: 6,
         hor_control_nzSpan: 16,
+        value: partner.partner_paid_in_captial,
         order: 16
       }),
 
@@ -215,6 +225,7 @@ export class FormPartnerTreeService {
         value: partner.partner_investment_date || null,
         hor_label_nzSpan: 6,
         hor_control_nzSpan: 16,
+
         order: 17
       }),
       new FormInputText({
@@ -223,6 +234,7 @@ export class FormPartnerTreeService {
 
         hor_label_nzSpan: 6,
         hor_control_nzSpan: 16,
+        value: partner.partner_wechat_num,
         order: 18
       }),
       new FormInputText({
@@ -231,6 +243,7 @@ export class FormPartnerTreeService {
 
         hor_label_nzSpan: 6,
         hor_control_nzSpan: 16,
+        value: partner.partner_qq_num,
         order: 19
       }),
       // 最后还有一个上传证件
@@ -239,7 +252,15 @@ export class FormPartnerTreeService {
         nzAction: API.UploadFile,
         label: '上传文件',
         icon: 'plus',
-        nzFileList: [],
+        nzFileList: partner.certification.photo_src ? [
+          {
+            uid: '-1',
+            name: '证件.png',
+            status: 'done',
+            url: partner.certification.photo_src,
+            thumbUrl: partner.certification.photo_src
+          }
+        ] : [],
         nzText: '上传',
         nzVisible: false,
         hor_label_nzSpan: 6,
@@ -251,7 +272,6 @@ export class FormPartnerTreeService {
         label: '法人代表/负责人信息',
         key: 'divider1',
         isHidden: is_write_fzr,
-
         order: 21
       }),
       new FormInputText({
@@ -351,7 +371,6 @@ export class FormPartnerTreeService {
       new FormInputText({
         label: '职位',
         key: 'partnerPerson.R_person_position',
-        required: true,
         isHidden: is_write_fzr,
         value: partner.partnerPerson.R_person_position,
         placeholder: '请输入职位',
@@ -360,7 +379,6 @@ export class FormPartnerTreeService {
       new FormInputText({
         label: '微信号',
         key: 'partnerPerson.R_person_wechat',
-
         isHidden: is_write_fzr,
         value: partner.partnerPerson.R_person_wechat,
         placeholder: '请输入微信号',
@@ -369,7 +387,6 @@ export class FormPartnerTreeService {
       new FormInputText({
         label: 'QQ号',
         key: 'partnerPerson.R_person_QQ',
-
         isHidden: is_write_fzr,
         value: partner.partnerPerson.R_person_QQ,
         placeholder: '请输入QQ号',

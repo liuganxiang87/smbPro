@@ -4,7 +4,7 @@ export class COrgPartnerPersonModel {
   public customer_vol: number; //  机构客户当前版本，每变更一次加一
   public zone_id: number; //  私募园区代码
   public R_person_name: string; //  关联人姓名
-  public R_person_sex: string; //  关联人性别：M:男  F:女
+  public R_person_sex: string = 'M'; //  关联人性别：M:男  F:女
   public R_person_id_card_num: string; //  关联人身份证号
   public R_person_phone_num: string; //  关联人手机号码
   public R_person_addr: string; //  关联人身份证地址

@@ -1,0 +1,45 @@
+<app-form-grid #fiveFormGrid [bfcs_grid]="bfcs$ |async" (submitForm)='_submitForm($event)'
+  (formModelChange)="_formModelChange($event)" (triggerFun)='_triggerFun($event)'>
+
+  <ng-container *ngIf="progress.agreement_templet==AgreementTemplet.fileCompany">
+    <nz-divider nzText="高管成员信息"></nz-divider>
+    <div class="table-div">
+      <nz-table #borderedTable [nzData]="progress.relationPerson" [nzFrontPagination]="false" [nzSize]="'small'">
+        <thead>
+          <tr>
+            <th>身份</th>
+            <th>姓名</th>
+            <th>证件类型</th>
+            <th>证件号码</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let data of basket;let i=index">
+            <tr>
+              <td>{{ data.R_person_mode |personModel }}</td>
+              <td>{{ data.R_person_name ||'--'}}</td>
+              <td>{{ data.R_person_id_type |personIdType }}</td>
+              <td>{{ data.R_person_id_card_num||'--'}}</td>
+              <td>
+                <a (click)="addItemRPerson(i,false)">{{!progress.isDisabled ? '编辑' : '查看'}}</a>
+                <ng-container *ngIf="(!progress.isDisabled)&&!data.noCanDel&&data.R_person_id_card_num">
+                  <nz-divider nzType="vertical"></nz-divider>
+                  <a class="del_delRPerson" (click)="delRPerson(i)">删除</a>
+                </ng-container>
+                <ng-container *ngIf="(!progress.isDisabled)&&data.canAdd">
+                  <nz-divider nzType="vertical"></nz-divider>
+                  <a (click)="addItemRPerson(i,true)">添加</a>
+                </ng-container>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </nz-table>
+
+    </div>
+  </ng-container>
+
+
+
+</app-form-grid>

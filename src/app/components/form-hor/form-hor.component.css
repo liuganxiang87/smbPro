@@ -21,6 +21,15 @@ i[nz-icon] {
   color: #666;
 }
 
+nz-date-picker ::ng-deep .ant-calendar-picker {
+  width: 100%;
+}
+
+nz-date-picker,
+nz-time-picker {
+  width: 100%;
+}
+
 .preview-div {
   padding: 1em;
 }

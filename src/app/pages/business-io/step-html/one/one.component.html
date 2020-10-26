@@ -1,0 +1,14 @@
+<div class="baseInfoForm">
+
+  <app-form-hor #createForm [bfcs]='bfcs$ | async' (submitForm)="_submitForm($event)" [showBottomBt]='_showBottomBt'
+    (formModelChange)='_formModelChange($event)'>
+  </app-form-hor>
+</div>
+
+
+
+<pop-customer-source #sourceComponent [(isVisible)]="source_isVisible" (_handCancle)="_handCancle()"
+  (_handOk)='_handOK($event)'>
+</pop-customer-source>
+<app-choose-customer [(display)]="CPersonDisplay" (personChange)="personHandler($event)">
+</app-choose-customer>

@@ -1,0 +1,11 @@
+.savebt {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 6em;
+}
+
+.savebt button {
+  min-width: 8em;
+}

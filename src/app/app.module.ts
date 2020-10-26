@@ -28,7 +28,9 @@ import { NgZorroAntdModule } from 'ng-zorro-antd';
       exclude: [API.login, API.zoneInfo, API.getProgressList, API.progressStatistical]
     }),
   ],
-  providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }, { provide: HTTP_INTERCEPTORS, useClass: MyInterceptorService, multi: true }],
+  providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy },
+  { provide: HTTP_INTERCEPTORS, useClass: MyInterceptorService, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

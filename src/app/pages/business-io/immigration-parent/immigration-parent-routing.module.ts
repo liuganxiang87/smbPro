@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { TwoComponent } from './two/two.component';
-import { ThreeComponent } from './three/three.component';
-import { FourComponent } from './four/four.component';
-import { OneComponent } from './one/one.component';
+import { OneComponent } from './one.component';
+import { TwoComponent } from './two.component';
+import { ThreeComponent } from './three.component';
+import { FourComponent } from './four.component';
 
 import { ImmigrationParentComponent } from './immigration-parent.component';
 import { ProgressDataGuard } from 'src/app/guards/progress-data.guard';

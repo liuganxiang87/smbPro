@@ -21,17 +21,12 @@ export class LoginGuard implements CanActivate {
     const zoneInfo = this.stor.getObject(this.stor.storKey.ZONE_INFO);
     const userInfo = this.stor.getObject(this.stor.storKey.USER_INFO);
     if (zoneInfo && zoneInfo.zone_id && userInfo && userInfo.w_phone) {
-      // console.log(zoneInfo);
-      // console.log(userInfo);
-      this.router.navigate['welcome']
-
+      this.router.navigate['welcome'];
     } else {
-
       let zoneName = 'qgc';
       if (zoneInfo && zoneInfo.zone_short_name) {
         zoneName = zoneInfo.zone_short_name;
       }
-      console.log(778788)
       this.router.navigate(["login"])
     }
 

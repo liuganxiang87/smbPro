@@ -4,6 +4,7 @@ import { BaseFormControls, FormCheckbox, FormCascader } from 'src/app/classes';
 import { FormControlService } from 'src/app/services';
 import { UploadFile } from 'ng-zorro-antd/upload';
 import { Key } from 'protractor';
+import { partner_id_type } from 'src/app/tools/global';
 @Component({
     selector: 'app-form-hor-partner',
     templateUrl: './form-hor.component.html',
@@ -15,6 +16,7 @@ export class FormHorPartnerComponent implements OnInit, OnChanges {
     @Input() button_text2: string = '取消';
     @Input() showCancelBt: boolean = false;
     @Input() showBottomBt: boolean = false;
+    @Input() nzLayout: string = 'vertical';
     @Output() submitForm = new EventEmitter();
     @Output() formModelChange = new EventEmitter();
     @Output() triggerFun = new EventEmitter();
@@ -26,6 +28,7 @@ export class FormHorPartnerComponent implements OnInit, OnChanges {
     ngOnInit() { }
     ngOnChanges(simp: SimpleChanges) {
         let that = this;
+        // console.log(':::::::::', simp)
         if (simp.bfcs && simp.bfcs.currentValue) {
             that.form = that.fcs.toFormGroup(that.bfcs);
         }
@@ -57,7 +60,6 @@ export class FormHorPartnerComponent implements OnInit, OnChanges {
         this.triggerFun.emit;
     }
     onSubmit() {
-        // const isViald = this.form.valid;
         const filterData = this.getFormData();
         // console.log()
         const vialdArr = []
@@ -67,7 +69,6 @@ export class FormHorPartnerComponent implements OnInit, OnChanges {
             item.markAsDirty();
             item.updateValueAndValidity();
         }
-        // console.log(vialdArr)
         if (vialdArr.every(el => el)) {
             filterData['certification.photo_src'] = this.fileUrl;
             this.submitForm.emit(filterData);
@@ -83,6 +84,11 @@ export class FormHorPartnerComponent implements OnInit, OnChanges {
         let val = this.form.get([key]).value;
         let modifyObj: any;
         switch (key) {
+            case 'partner_is_person_or_org':
+                modifyObj = this.bfcs[index + 1];
+                modifyObj.options = partner_id_type[val];
+                this.form.patchValue({ [modifyObj.key]: partner_id_type[val][0].value });
+                break;
             case 'if_limited':
                 modifyObj = this.bfcs[index + 1];
                 modifyObj.isHidden = val == "T";
@@ -95,11 +101,9 @@ export class FormHorPartnerComponent implements OnInit, OnChanges {
                         case 'partner_education':
                         case 'partner_political':
                             item.isHidden = val != 1;
-                            break
+                            break;
                     }
                 }
-
-
                 break;
 
             case 'partner_is_person_or_org':
@@ -133,19 +137,16 @@ export class FormHorPartnerComponent implements OnInit, OnChanges {
 
 
     uploadChange(index: number, info: any) {
-        console.log('!!!!!!!!', index, info);
         if (info.type == 'success') {
             const fileList = info.fileList;
             if (fileList && fileList[0] && fileList[0].response.status) {
                 this.fileUrl = fileList[0].response.fileSrc;
             }
         }
-
     }
     handlePreview = (file: UploadFile) => {
         console.log('~~~~~~~~~~~~~', file)
         this.previewImage = file.url || file.thumbUrl;
-
         this.previewVisible = true;
     };
 

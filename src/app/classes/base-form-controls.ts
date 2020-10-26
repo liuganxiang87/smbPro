@@ -30,7 +30,10 @@ export class BaseFormControls<T> {
     isHidden: boolean;
     readonly: boolean;
     ngStyle: any;
-    options: { key: string, value: string }[];
+    gridCol: number;
+    // options: { key: string, value: string }[];
+    nzLayout: string;
+    completeData: any;
     constructor(options: {
         value?: T,
         key?: string,
@@ -53,7 +56,10 @@ export class BaseFormControls<T> {
         isDisabled?: boolean,
         isHidden?: boolean,
         readonly?: boolean,
-        ngStyle?: any
+        ngStyle?: any,
+        gridCol?: number,
+        nzLayout?: string;
+        completeData?: any;  //完整数据
     } = {}) {
         this.value = options.value;
         this.key = options.key || null;
@@ -65,7 +71,7 @@ export class BaseFormControls<T> {
         this.customCheck = options.customCheck || null;  //客户自定义校验正则
         this.order = options.order === undefined ? 1 : options.order;
         this.controlType = options.controlType || '';
-        this.type = options.type || '';
+        this.type = options.type || 'text';
         this.icon = options.icon || '';
         this.placeholder = options.placeholder || '';
         this.width = options.width || "auto";
@@ -76,6 +82,9 @@ export class BaseFormControls<T> {
         this.isDisabled = options.isDisabled || false;
         this.isHidden = options.isHidden || false;
         this.readonly = options.readonly || false;
-        this.ngStyle = options.ngStyle
+        this.ngStyle = options.ngStyle;
+        this.gridCol = options.gridCol || 8;
+        this.nzLayout = options.nzLayout || 'vertical';
+        this.completeData = options.completeData || null;
     }
 }

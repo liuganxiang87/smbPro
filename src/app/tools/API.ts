@@ -36,9 +36,10 @@ export const API = {
     templateDataFundSave: hostB + 'template/fund-save',  //有限合伙基金通用模板数据保存
     templateDataCompanySave: hostB + 'template/company-save', //有限公司通用模板数据保存
     customerRelationPersonEdit: hostB + 'relation-person/edit', //新增/编辑关联人信息
-    customerRelationPersonDelete: hostB + 'relation-person/delete', //删除关联人信息
-    customerRelationOrgEdit: hostB +
-        'relation-org/edit', //新增/编辑关联企业信息
+    // http://www.assetin.cn/smjj/customer/web/index.php?r=relation-person/delete
+    // customerRelationPersonDelete: hostB + 'relation-person/delete', //删除关联人信息
+    customerRelationPersonDelete: 'www.assetin.cn/smjj/customer/web/index.php?r=relation-person/delete',
+    customerRelationOrgEdit: hostB + 'relation-org/edit', //新增/编辑关联企业信息
     fileDocVerifyPass: hostB + 'file-doc/verify-pass',  //客户专员审核通过
     fileDocSendToCustomer: hostB + 'file-doc/send-to-customer', //发送PDF文件给客户
     fileDocToPdf: hostB + 'file-doc/to-pdf',  //fileDoc转PDF

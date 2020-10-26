@@ -4,12 +4,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
-
-
 @Component({
   selector: 'app-set-up-parent',
-  templateUrl: './set-up-parent.component.html',
-  styleUrls: ['./set-up-parent.component.css']
+  templateUrl: '../step-html/parent/parent.component.html',
+  styleUrls: ['../step-html/parent/parent.component.css']
 })
 export class SetUpParentComponent implements OnInit, OnDestroy {
   stageTwo: string = "信息";
@@ -42,6 +40,7 @@ export class SetUpParentComponent implements OnInit, OnDestroy {
     if (location.includes('/two/')) this.index = 1;
     if (location.includes('/three/')) this.index = 2;
     if (location.includes('/four/')) this.index = 3;
+    if (location.includes('/five/')) this.index = 4;
   }
   onIndexChange(index: number) {
     let index_str = 'one'
@@ -55,10 +54,10 @@ export class SetUpParentComponent implements OnInit, OnDestroy {
       case 3:
         index_str = 'four'
         break;
+      case 4:
+        index_str = 'five'
+        break;
     }
-
-    console.log(index_str)
-
   }
   ngOnDestroy() {
     console.log('--------销毁----------');

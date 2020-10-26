@@ -4,30 +4,27 @@
     <nz-form-label [nzFor]='formItem.key+index'>{{formItem.label}}</nz-form-label>
     <nz-form-control nzErrorTip="Please input your username!">
       <div [ngSwitch]="formItem.controlType">
-
         <ng-container *ngSwitchCase="'textInput'">
           <nz-input-group nzPrefixIcon="">
-
             <input [formControlName]="formItem.key" [type]="formItem.type" [id]='formItem.key+index' nz-input
               [placeholder]='formItem.placeholder' />
           </nz-input-group>
         </ng-container>
-
         <ng-container *ngSwitchCase="'dropdown'">
           <nz-select [ngStyle]="{'width': formItem.width}" [id]="formItem.key+index" [formControlName]="formItem.key"
             [nzPlaceHolder]="formItem.placeholder">
             <nz-option [nzValue]="opt.value" [nzLabel]="opt.key" *ngFor="let opt of formItem.options"></nz-option>
-
           </nz-select>
         </ng-container>
-
         <ng-container *ngSwitchCase="'switch'">
           <nz-switch [formControlName]="formItem.key" [nzCheckedChildren]="formItem.openText"
             (ngModelChange)="onSubmit()" [nzUnCheckedChildren]="formItem.closeText"></nz-switch>
         </ng-container>
 
-      </div>
 
+
+
+      </div>
     </nz-form-control>
   </nz-form-item>
 

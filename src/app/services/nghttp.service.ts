@@ -21,7 +21,7 @@ export class NghttpService {
 
   POST(url: string, params?: any): Observable<any> {
     return this.http.post(url, params).pipe(
-      retry(2), // retry a failed request up to 3 times
+      retry(1), // retry a failed request up to 3 times
       catchError(this.handleError) // then handle the error
     );
   }

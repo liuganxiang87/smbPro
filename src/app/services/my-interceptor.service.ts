@@ -1,12 +1,10 @@
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponseBase, HttpResponse } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, mergeMap } from 'rxjs/operators';
 import { MyStorageService } from './my-storage.service';
-
 
 const CODEMESSAGE = {
   200: '服务器成功返回请求的数据。',
@@ -31,15 +29,12 @@ const CODEMESSAGE = {
 })
 export class MyInterceptorService implements HttpInterceptor {
   constructor(private injector: Injector, private stor: MyStorageService) { }
-
   private get notification(): NzNotificationService {
     return this.injector.get(NzNotificationService);
   }
-
   private goTo(url: string) {
     setTimeout(() => this.injector.get(Router).navigateByUrl(url));
   }
-
   private checkStatus(ev: HttpResponseBase) {
     if (ev.status >= 200 && ev.status < 300) {
       return;
@@ -47,6 +42,7 @@ export class MyInterceptorService implements HttpInterceptor {
     const errortext = CODEMESSAGE[ev.status] || ev.statusText;
 
     this.notification.error(`请求错误 ${ev.status}: ${ev.url}`, errortext);
+    // this.notification.remove();
   }
 
   private handleData(ev: HttpResponseBase): Observable<any> {
@@ -78,7 +74,7 @@ export class MyInterceptorService implements HttpInterceptor {
         break;
       case 401:
 
-        this.notification.error(`未登录或登录已过期，请重新登录。`, ``);
+        this.notification.error('提示', CODEMESSAGE[ev.status]);
         // 清空 token 信息
         this.stor.remove(this.stor.storKey.USER_INFO);
         this.goTo(`login`);
@@ -87,7 +83,7 @@ export class MyInterceptorService implements HttpInterceptor {
       case 404:
       case 500:
         // this.goTo(`/exception/${ev.status}`);
-
+        this.notification.error('提示', CODEMESSAGE[ev.status]);
         break;
       default:
 
@@ -116,8 +112,12 @@ export class MyInterceptorService implements HttpInterceptor {
           url = 'http://' + url;
         }
         // 设置token
-        const token: string = this.stor.getObject(this.stor.storKey.USER_INFO).token;
+        let token: string = this.stor.getObject(this.stor.storKey.USER_INFO).token;
+
+
+
         if (token) {
+          // console.log('token::::::::::::::', token)
           req = req.clone({ headers: req.headers.set('Authorization', 'Bearer ' + token) });
         }
         const newReq = req.clone({ url });
@@ -130,7 +130,11 @@ export class MyInterceptorService implements HttpInterceptor {
             // 若一切都正常，则后续操作
             return of(event);
           }),
-          catchError((err: HttpErrorResponse) => this.handleData(err)),
+          catchError((err: HttpErrorResponse) => {
+            console.log('==========', err)
+
+            return this.handleData(err)
+          }),
         );
 
       } else {

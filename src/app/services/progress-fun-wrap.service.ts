@@ -1,14 +1,16 @@
-import { CompileStylesheetMetadata } from '@angular/compiler';
+
 import { Injectable } from '@angular/core';
 import { CustomerInProgressModel, DefaultBusinessPeriod } from '../models';
 import { TimeHelper } from '../tools/Time.helper';
 import { PublicService } from '../services/public.service';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ProgressFunWrapService {
   constructor(private ps: PublicService) { }
   translateForm(formObj: any, progress: CustomerInProgressModel) {
+
     for (let key in formObj) {
       const val = formObj[key];
       const arr = key.split('.');
@@ -53,27 +55,22 @@ export class ProgressFunWrapService {
     }
 
 
-    return {
-      formObj: formObj,
-      progress: progress
-    }
+    return progress
 
 
   }
-
-
   submitAdjust(progress: CustomerInProgressModel) {
+
     /**
-   * 需要转换处理的数据
-   * 1.原公司小类别
-   * 2.公司小类别
-   * 3.last_day_pay(交付期限)；
-   * 4.moveBefore.customer_lifecycle  //原经营期限
-   * 5. 部分数字和字符串类型转换，eg: 后台强调org_structure为字符串
-   */
+     * 需要转换处理的数据
+     * 1.原公司小类别
+     * 2.公司小类别
+     * 3.last_day_pay(交付期限)；
+     * 4.moveBefore.customer_lifecycle  //原经营期限
+     * 5. 部分数字和字符串类型转换，eg: 后台强调org_structure为字符串
+     */
     progress.org_structure = progress.org_structure.toString();
     progress.inputArg.start_name = progress.inputArg.start_name.toString();
-    console.log('============', progress.type)
     switch (progress.type) {
       case 1:
         break;
@@ -93,17 +90,34 @@ export class ProgressFunWrapService {
           progress.moveBefore.customer_org_end_date = new Date(progress.moveBefore.customer_lifecycle[1]).getTime();
         } else {
           progress.moveBefore.customer_org_begin_date = new Date(progress.moveBefore.customer_lifecycle).getTime();
-          progress.moveBefore.customer_org_end_date = 0
+          progress.moveBefore.customer_org_end_date = 0;
         }
         break;
     }
     progress.small_class.forEach(el => { if (el > 0) progress.org_structure_detail = el });
     // last_day_4_pay有可能是Date类型，有可能是number类型------------最终都转为时间戳；
     if (progress.last_day_4_pay instanceof Date) progress.last_day_4_pay = new Date(this.ps.copyData(progress.last_day_4_pay)).getTime();
-
     return progress
-
   }
+
+  progressBankInit(progress: CustomerInProgressModel) {
+    for (let item of progress.allBank) {
+      item.key = item.bank_name;
+      item.value = item.bank_sid;
+      if ((!item.display_for_customer)
+        || (item.if_biz_futures < progress.preDemand.if_biz_futures)
+        || (item.if_biz_security < progress.preDemand.if_biz_security)
+        || (item.if_foreign_exchange < progress.preDemand.if_foreign_exchange)
+        || (item.if_fund_custody_account < progress.preDemand.if_fund_custody_account)
+        || (item.if_raise_money_account < progress.preDemand.if_raise_money_account)) {
+        item.isHidden = true;
+      } else {
+        item.isHidden = false;
+      }
+    }
+    return progress
+  }
+
 
 
 }

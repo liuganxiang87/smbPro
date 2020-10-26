@@ -1,0 +1,4 @@
+<!-- (submitForm)="_submitForm($event)"   (formModelChange)='_formModelChange($event)' -->
+<app-form-grid [bfcs_grid]="bfcs$ |async" [preDemand]='progress.preDemand' [progressId]='progress.customer_org_reg_sid'
+  (submitForm)='_submitForm($event)'>
+</app-form-grid>

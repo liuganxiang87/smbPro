@@ -10,8 +10,6 @@ export class CustomerRelationOrgModel {
   public R_org_addr: string; // 关联企业地址
   public R_org_representative: number; //关联企业的代表，指向表 customer_relation_person 的 relation_person_id
 
-  //辅助字段
-  public display: boolean = false;
 }
 
 export class CustomerRelationOrgHelper {

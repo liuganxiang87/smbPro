@@ -130,7 +130,7 @@ export let SourceArr = [
     { id: 6, text: "介绍人推荐" },
 ];
 
-export const partnerIdType = {
+export const partner_id_type = {
     '1': [
         { value: "1", key: "身份证" },
         { value: "3", key: "护照" }
@@ -140,10 +140,16 @@ export const partnerIdType = {
     "4": [{ value: "4", key: "资管产品号" }],
     "5": [{ value: "2", key: "企业社会信用代码" }]
 }
+export const partnerIdAllTypeArr = [
+    { value: "1", key: "身份证" },
+    { value: "2", key: "企业社会信用代码" },
+    { value: "3", key: "护照" },
+    { value: "4", key: "资管产品号" }
+];
 
 export const raceArr = [
     { value: 1, key: "汉族" },
-    { value: 2, text: "蒙古族" },
+    { value: 2, key: "蒙古族" },
     { value: 3, key: "回族" },
     { value: 4, key: "藏族" },
     { value: 5, key: "维吾尔族" },
@@ -179,7 +185,7 @@ export const raceArr = [
 ];
 
 export const educationArr = [
-    { value: 1, text: "研究生及以上" },
+    { value: 1, key: "研究生及以上" },
     { value: 2, key: "大学本科" },
     { value: 3, key: "大学专科" },
     { value: 4, key: "中等专业学校" },
@@ -218,6 +224,102 @@ export const companyTypes = [
     { value: "4", key: "资管产品" },
     { value: "5", key: "其他组织" }
 ]
+
+// 基金行业投资方向1  选项
+export const fundInvestOptions = {
+    1: [
+        { value: 1, key: "证券投资管理" },
+        { value: 2, key: "股权投资管理" },
+        { value: 3, key: "创业投资管理" },
+        { value: 4, key: "其他" }
+    ],
+    2: [
+        { value: 1, key: "证券投资" },
+        { value: 2, key: "股权投资" },
+        { value: 3, key: "创业投资" },
+        { value: 4, key: "其他" }
+    ]
+};
+
+// 其他行业投资方向2  选项
+export const otherInvestOptions = [
+    { value: 1, key: "互联网" },
+    { value: 2, key: "文化传媒" },
+    { value: 3, key: "科学研究和技术服务" },
+    { value: 4, key: "先进制造" },
+    { value: 5, key: "金融业" },
+    { value: 6, key: "新能源" },
+    { value: 7, key: "新材料" },
+    { value: 8, key: "教育" },
+    { value: 9, key: "生物医药" },
+    { value: 10, key: "节能环保" },
+    { value: 11, key: "新能源汽车" },
+    { value: 12, key: "生物产业" },
+    { value: 13, key: "新兴信息产业" },
+    { value: 14, key: "高端装备制造业" },
+    { value: 15, key: "其他行业" }
+];
+
+export const status_arr = [
+    { value: "T", key: "是" },
+    { value: "F", key: "否" }
+];
+export const status_num_arr = [
+    { value: 1, key: "是" },
+    { value: 0, key: "否" }
+];
+export const status_letter_arr = [
+    { value: "A", key: "是" },
+    { value: "B", key: "否" }
+];
+
+export const fund_open_type_arr = [
+    { value: "O", key: "开放式" },
+    { value: "C", key: "封闭式" }
+];
+//基金产品风险评级：1：高度风险，2：中高度，3：中等，4：中低度，; //5：低度
+export const fund_risk_ratingArr = [
+    { value: "1", key: "高度风险" },
+    { value: "2", key: "中高度" },
+    { value: "3", key: "中等" },
+    { value: "4", key: "中低度" },
+    { value: "5", key: "低度" }
+];
+//客户风险识别、评估、承受能力:; //1:; //进取型，2：成长型，3：平衡型，4：稳健型，5：保守型
+export const fund_risk_enduranceArr = [
+    { value: "1", key: "进取型" },
+    { value: "2", key: "成长型" },
+    { value: "3", key: "平衡型" },
+    { value: "4", key: "稳健型" },
+    { value: "5", key: "保守型" }
+];
+
+export const personPostionOptions = [
+    { value: 1, key: "企业代办人" },
+    { value: 2, key: "企业对接人" },
+    { value: 3, key: "企业财务对接人" },
+    { value: 4, key: "法人代表" },
+    { value: 5, key: "董事长" },
+    { value: 6, key: "总经理" },
+    { value: 7, key: "董事" },
+    { value: 8, key: "监事会主席" },
+    { value: 9, key: "监事" },
+    { value: 10, key: "副董事长" },
+    { value: 11, key: "投资顾问" },
+    { value: 12, key: "股份托管机构对接人" },
+    { value: 13, key: "项目介绍人" },
+    { value: 14, key: "母公司代表" },
+    { value: 15, key: "办理业务打款人" },
+    { value: 16, key: "投资顾问公司的对接人" },
+    { value: 17, key: "外包代缴社保机构对接人" },
+    { value: 18, key: "执行董事" },
+    { value: 19, key: "财务操作（出纳）" },
+    { value: 20, key: "财务复核（会计）" },
+    { value: 21, key: "财务主管（领导）" },
+    { value: 22, key: "有限公司的实际控制人，个人第一大股东" },
+    { value: 23, key: "监事(不设监事会)" }
+];
+
 // 默认经营期限
 export const DefaultBusinessPeriod = 30;
 export const bussinseLicenseReg = /(^(?:(?![IOZSV])[\dA-Z]){2}\d{6}(?:(?![IOZSV])[\dA-Z]){10}$)|(^\d{15}$)/;

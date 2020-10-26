@@ -4,17 +4,20 @@ import { API } from '../tools/API';
 import { Small_clasess, SourceArr } from '../tools/global';
 import { TimeHelper } from '../tools/Time.helper';
 import { NghttpService } from './nghttp.service';
+import { PublicService } from './public.service';
 @Injectable({
   providedIn: 'root'
 })
 export class ProgressInitService {
-  constructor(private myhttp: NghttpService) { }
+  constructor(private myhttp: NghttpService, private publicService: PublicService) { }
   async initData(progress: CustomerInProgressModel, type: number = 1) {
     let that = this;
     progress.type = type;
 
     progress.businessPeriodInfinite = progress.customer_org_end_date == 0;
+
     that.smallClassFormat(progress);
+
     that.customer_name_format(progress);
     /**
      * 如果customer_org_end_date！=0；计算 businessPeriod  经营期限
@@ -90,6 +93,7 @@ export class ProgressInitService {
       that.moveBeforesSmallClassFormat(progress)
     }
     // console.log('@----------@', progress)
+
     return progress
   }
   customer_name_format(progress: CustomerInProgressModel) {
@@ -129,12 +133,8 @@ export class ProgressInitService {
     /**
       * 对小类别对初始化
       */
-    progress.nzOptions = [];
+    [progress.nzOptions, progress.values] = [[], []];
     progress.nzOptions = progress.org_structure == 1 ? Small_clasess.type_one : Small_clasess.type_two;
-    // console.log()
-
-
-
     //如果是查看，之前对org_structure_detail没有定义，需要给与一个默认数值；
     let small_class: any;
     if (!progress.org_structure_detail) {
@@ -143,7 +143,7 @@ export class ProgressInitService {
       small_class = progress.org_structure_detail;
     }
     //根据 small_class 可以找到上级  得到默认值that.values
-    progress.values = [];
+
     progress.nzOptions.forEach(item => {
       if (!item.isLeaf) {
         item.children.forEach(element => {
@@ -157,8 +157,10 @@ export class ProgressInitService {
         }
       }
     })
+    console.log('===================', JSON.stringify(progress.nzOptions))
 
     return progress
+
   }
 
   moveBeforesSmallClassFormat(progress: CustomerInProgressModel) {

@@ -8,7 +8,10 @@ const routes: Routes = [
     path: '', component: WelcomeComponent,
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'inProcess' },
-      { path: 'inProcess', loadChildren: () => import('../in-process/in-process.module').then(m => m.InProcessModule) },
+      {
+        path: 'inProcess',
+        loadChildren: () => import('../in-process/in-process.module').then(m => m.InProcessModule)
+      },
       {
         path: 'bussinessIO',
         loadChildren: () => import('../business-io/business-io.module').then(m => m.BusinessIOModule),

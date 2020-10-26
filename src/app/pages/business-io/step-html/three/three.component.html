@@ -1,0 +1,17 @@
+<nz-radio-group [(ngModel)]="progress.agreement_templet" [nzButtonStyle]="'solid'">
+  <label nz-radio-button [nzValue]="AgreementTemplet.fileNoFund"
+    [nzDisabled]="progress.org_structure != OrgStructure.partner">
+    {{AgreementTempletObj[AgreementTemplet.fileNoFund]}}
+  </label>
+  <label nz-radio-button [nzValue]="AgreementTemplet.fileFund"
+    [nzDisabled]="progress.org_structure != OrgStructure.partner">
+    {{AgreementTempletObj[AgreementTemplet.fileFund]}}
+  </label>
+  <label nz-radio-button [nzValue]="AgreementTemplet.fileCompany"
+    [nzDisabled]="progress.org_structure != OrgStructure.company">
+    {{AgreementTempletObj[AgreementTemplet.fileCompany]}}--{{AgreementTemplet.fileCompany}}
+  </label>
+</nz-radio-group>
+<div class="savebt">
+  <button nz-button nzType='primary' (click)='save()'>下一步</button>
+</div>

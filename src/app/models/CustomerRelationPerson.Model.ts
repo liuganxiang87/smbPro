@@ -23,9 +23,11 @@ export class CustomerRelationPersonModel {
   public R_email: string; //邮箱
 
   //辅助字段
-  public display: boolean = false; //是否显示
+  // public display: boolean = false; //是否显示
   public phoneIsWechat: string = "1"; //手机号码是否是微信
   public isPersonInPartner: string = "T"; //关联人是否存在股东列表中
+  public noCanDel: boolean = false;             //是否添加删除按钮
+  public canAdd: boolean = false;            //同职位是否可再添加
 }
 
 export class CustomerRelationPersonHelper {
@@ -195,28 +197,28 @@ export const RelationPersonModeArr = [
   { id: 23, text: "监事(不设监事会)" }
 ];
 export const RPersonModeObj = {
-  1 : "企业代办人",
-  2: "企业对接人" ,
-  3: "企业财务对接人" ,
-  4: "法人代表" ,
-  5: "董事长" ,
-  6: "总经理" ,
-  7: "董事" ,
-  8: "监事会主席" ,
-  9: "监事" ,
-  10: "副董事长" ,
-  11: "投资顾问" ,
-  12: "股份托管机构对接人" ,
-  13: "项目介绍人" ,
-  14: "母公司代表" ,
-  15: "办理业务打款人" ,
-  16: "投资顾问公司的对接人" ,
-  17: "外包代缴社保机构对接人" ,
-  18: "执行董事" ,
-  19: "财务操作（出纳）" ,
-  20: "财务复核（会计）" ,
-  21: "财务主管（领导）" ,
-  22: "有限公司的实际控制人，个人第一大股东" ,
+  1: "企业代办人",
+  2: "企业对接人",
+  3: "企业财务对接人",
+  4: "法人代表",
+  5: "董事长",
+  6: "总经理",
+  7: "董事",
+  8: "监事会主席",
+  9: "监事",
+  10: "副董事长",
+  11: "投资顾问",
+  12: "股份托管机构对接人",
+  13: "项目介绍人",
+  14: "母公司代表",
+  15: "办理业务打款人",
+  16: "投资顾问公司的对接人",
+  17: "外包代缴社保机构对接人",
+  18: "执行董事",
+  19: "财务操作（出纳）",
+  20: "财务复核（会计）",
+  21: "财务主管（领导）",
+  22: "有限公司的实际控制人，个人第一大股东",
   23: "监事(不设监事会)"
 };
 //证件类型： 1：身份证，2：企业社会信用代码(不能填)，3：护照
@@ -226,7 +228,7 @@ export enum RPersonIdType {
   passport = '3'
 }
 export const RPersonIdTypeObj = {
-  "1" : "身份证",
+  "1": "身份证",
   // "2" : "企业社会信用代码",
-  "3" : "护照"
+  "3": "护照"
 };

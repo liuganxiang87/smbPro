@@ -1,0 +1,166 @@
+<div *ngIf="!!form_grid&&!!bfcs_grid">
+  <form nz-form [formGroup]="form_grid" class="ant-advanced-search-form" (ngSubmit)="onSubmit()" #form_distannce>
+    <div nz-row [nzGutter]="24">
+      <div nz-col *ngFor="let formItem of bfcs_grid  let index=index" [nzSpan]="formItem.gridCol"
+        [hidden]="formItem.isHidden">
+        <ng-container [ngSwitch]="formItem.controlType">
+          <!-- textInput -->
+          <nz-form-item *ngSwitchCase="'textInput'">
+            <nz-form-label [nzFor]='formItem.key+formItem.type+index' [nzRequired]='formItem.required'
+              [nzNoColon]='formItem.hasNoColon'>
+              {{formItem.label}}</nz-form-label>
+            <nz-form-control *ngIf='!formItem.hasAffterEvent'>
+              <!-- -->
+              <nz-input-group [nzPrefixIcon]="formItem.nzPrefixIcon" [nzAddOnAfter]="formItem.addOnAffter">
+                <input nz-input [formControlName]="formItem.key" [type]="formItem.type" [readonly]='formItem.readonly'
+                  [ngStyle]="formItem.ngStyle" (ngModelChange)="modelChange(index)"
+                  [attr.id]='formItem.key+formItem.type+index' [placeholder]='formItem.placeholder' />
+              </nz-input-group>
+            </nz-form-control>
+            <nz-form-control *ngIf="formItem.hasAffterEvent">
+              <input nz-input [formControlName]="formItem.key" [type]="formItem.type" class="dif_input"
+                [readonly]='formItem.readonly' [ngStyle]="formItem.ngStyle" (ngModelChange)="modelChange(index)"
+                [attr.id]='formItem.key+formItem.type+index' [placeholder]='formItem.placeholder' />
+              <button nz-button nzType="primary" nzSize='small' class="addAfterbt"
+                (click)="clickDo($event,index)">{{formItem.addOnAffter}}</button>
+            </nz-form-control>
+          </nz-form-item>
+          <!-- dropdown -->
+          <nz-form-item *ngSwitchCase="'dropdown'">
+            <nz-form-label [nzRequired]='formItem.required' [nzNoColon]='formItem.hasNoColon'>{{formItem.label}}
+            </nz-form-label>
+            <nz-form-control>
+              <nz-select [ngStyle]="{'width': formItem.width}" [formControlName]="formItem.key"
+                [nzPlaceHolder]="formItem.placeholder">
+                <nz-option [nzValue]="opt.value" [nzLabel]="opt.key" *ngFor="let opt of formItem.options"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <!-- textarea -->
+          <nz-form-item *ngSwitchCase="'textarea'">
+            <nz-form-label [nzFor]='formItem.key+formItem.type+index' [nzRequired]='formItem.required'
+              [nzRequired]='formItem.required' [nzNoColon]='formItem.hasNoColon'>{{formItem.label}} </nz-form-label>
+            <nz-form-control [nzErrorTip]="formItem.errorHint">
+              <textarea nz-input [attr.id]='formItem.key+formItem.type+index' [formControlName]="formItem.key"
+                [rows]='formItem.rows' [placeholder]="formItem.placeholder"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+
+          <!--datePicker  -->
+          <nz-form-item *ngSwitchCase="'datePicker'">
+            <nz-form-label [nzNoColon]='formItem.hasNoColon' [nzRequired]='formItem.required'>{{formItem.label}}
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="formItem.errorHint">
+              <nz-date-picker *ngIf='!formItem.isRange' [formControlName]="formItem.key">
+              </nz-date-picker>
+              <nz-range-picker *ngIf='formItem.isRange' [formControlName]="formItem.key">
+              </nz-range-picker>
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- radio -->
+          <nz-form-item *ngSwitchCase="'radio'">
+            <nz-form-label [nzRequired]='formItem.required' [nzNoColon]='formItem.hasNoColon'>
+              {{formItem.label}}
+            </nz-form-label>
+            <nz-form-control>
+              <nz-radio-group [nzButtonStyle]="formItem.radioType==1?'outline':'solid'" [formControlName]="formItem.key"
+                (ngModelChange)="modelChange(index)">
+                <ng-container *ngFor="let item of formItem.options">
+                  <label *ngIf="!item.isHidden" nz-radio-button [nzValue]="item.value">{{item.key}}</label>
+                </ng-container>
+              </nz-radio-group>
+            </nz-form-control>
+          </nz-form-item>
+          <!-- checkbox -->
+          <nz-form-item *ngSwitchCase="'checkbox'">
+            <nz-form-label [nzSpan]="formItem.hor_label_nzSpan" [nzRequired]='formItem.required'
+              [nzNoColon]='formItem.hasNoColon'>{{formItem.label}}
+            </nz-form-label>
+            <nz-form-control [nzSpan]="formItem.hor_control_nzSpan" [nzErrorTip]="formItem.errorHint">
+              <nz-checkbox-group [(ngModel)]="formItem.checkOptions" [ngModelOptions]='{standalone:true}'
+                (ngModelChange)="modelChange(index)">
+              </nz-checkbox-group>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item *ngSwitchCase="'switch'">
+            <nz-form-label [nzSpan]="formItem.hor_label_nzSpan" [nzRequired]='formItem.required'
+              [nzNoColon]='formItem.hasNoColon'>{{formItem.label}}
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="formItem.errorHint">
+              <nz-switch [formControlName]="formItem.key" [nzCheckedChildren]="formItem.openText"
+                (ngModelChange)="modelChange(index)" [nzUnCheckedChildren]="formItem.closeText"></nz-switch>
+            </nz-form-control>
+          </nz-form-item>
+
+
+          <!-- cascader -->
+          <nz-form-item *ngSwitchCase="'cascader'">
+            <nz-form-label [nzRequired]='formItem.required' [nzNoColon]='formItem.hasNoColon'>{{formItem.label}}
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="formItem.errorHint">
+              <nz-cascader [nzOptions]="formItem.nzOptions" [formControlName]="formItem.key"
+                [nzPlaceHolder]='formItem.placeholder'>
+              </nz-cascader>
+            </nz-form-control>
+          </nz-form-item>
+
+
+          <!--  divider -->
+          <nz-form-item *ngSwitchCase="'divider'">
+            <nz-divider [nzDashed]='formItem.dividerDashed' [nzType]='formItem.dividerType' [nzText]="formItem.label"
+              [nzOrientation]='formItem.dividerOrientation'></nz-divider>
+          </nz-form-item>
+          <!-- upload-->
+          <nz-form-item *ngSwitchCase="'upload'">
+            <nz-form-label [attr.id]='formItem.key+index' [nzRequired]='formItem.required' [innerHTML]='formItem.label'
+              [nzNoColon]='formItem.hasNoColon'></nz-form-label>
+            <nz-form-control [nzErrorTip]="formItem.errorHint" [nzValidateStatus]='formItem.nzValidateStatus'>
+              <nz-upload [nzAction]="formItem.nzAction" [nzListType]="formItem.nzListType"
+                [nzShowButton]="formItem.nzFileList.length < formItem.nzMax" [(nzFileList)]="formItem.nzFileList"
+                [nzPreview]="handlePreview" [nzShowUploadList]="formItem.nzShowUploadList"
+                [nzHeaders]="formItem.nzHeaders" [nzSize]="formItem.nzSize" (nzChange)='uploadChange(index,$event)'>
+                <i nz-icon [nzType]="formItem.icon"></i>
+                <div class="ant-upload-text">{{formItem.text}}</div>
+              </nz-upload>
+            </nz-form-control>
+            <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null"
+              (nzOnCancel)="previewVisible = false">
+              <ng-template #modalContent>
+                <div class="preview-div">
+                  <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+                </div>
+              </ng-template>
+            </nz-modal>
+          </nz-form-item>
+        </ng-container>
+
+      </div>
+    </div>
+    <div nz-row>
+      <div nz-col [nzSpan]="24">
+        <ng-content></ng-content>
+      </div>
+    </div>
+
+
+    <div nz-row>
+      <div nz-col [nzSpan]="24" class="search-area">
+        <button nz-button [nzType]="'primary'"> {{button_text1}} </button>
+        <button nz-button (click)="resetForm()"> {{button_text2}}</button>
+      </div>
+    </div>
+  </form>
+
+
+</div>
+
+
+
+<nz-modal [(nzVisible)]="isVisible" [nzTitle]="ModalTitle" [nzOkText]="nzOkText" [nzCancelText]="nzCancelText"
+  [nzWidth]='ModalNzWidth' (nzOnOk)="handleOk()" (nzOnCancel)="handleCancel()" [nzOkDisabled]='nzOkDisabled'>
+  <div class="baseInfoForm">
+    <app-form-hor #modalRelationPerson [bfcs]='bfcs$ | async' (submitForm)="_submitForm($event)"></app-form-hor>
+  </div>
+</nz-modal>

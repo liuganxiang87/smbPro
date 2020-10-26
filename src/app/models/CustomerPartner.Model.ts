@@ -166,34 +166,7 @@ export enum PartnerIdType {
   technologyProductNo = "4"
 }
 
-export const PartnerIdTypeObj = {
-  "1": [
-    { id: "1", text: "身份证" },
-    { id: "3", text: "护照" }
-  ],
-  "2": [{ id: "2", text: "企业社会信用代码" }],
-  "3": [{ id: "2", text: "企业社会信用代码" }],
-  "4": [{ id: "4", text: "资管产品号" }],
-  "5": [{ id: "2", text: "企业社会信用代码" }]
-};
 
-// export const PartnerIdType2Obj = {
-
-//   "1": [
-//     { id: "1", text: "身份证" },
-//     { id: "3", text: "护照" }
-//   ],
-//   "2": [{ id: "2", text: "企业社会信用代码" }],
-//   "3": [{ id: "2", text: "企业社会信用代码" }],
-//   "4": [{ id: "4", text: "资管产品号" }],
-//   "5": [{ id: "2", text: "企业社会信用代码" }]
-// };
-export const PartnerIdTypeArr = [
-  { id: "1", text: "身份证" },
-  { id: "2", text: "企业社会信用代码" },
-  { id: "3", text: "护照" },
-  { id: "4", text: "资管产品号" }
-];
 
 //审核状态： 1=完全匹配， 2=等待人工审核  3=驳回重填，4=人工审核通过
 export enum PartnerVerifyStatus {

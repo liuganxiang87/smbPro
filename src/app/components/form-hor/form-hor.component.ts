@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { BaseFormControls, FormCheckbox, FormCascader } from 'src/app/classes';
-import { FormControlService } from 'src/app/services';
+import { BaseFormControls, FormCheckbox, FormCascader, FormDivider } from 'src/app/classes';
+import { FormControlService, PublicService } from 'src/app/services';
 import { StartNameTextObj, StartName } from 'src/app/models';
 import { Small_clasess } from 'src/app/tools/global';
 
 import { UploadFile } from 'ng-zorro-antd/upload';
+import { FormUpload } from 'src/app/classes/form-upload';
 @Component({
   selector: 'app-form-hor',
   templateUrl: './form-hor.component.html',
@@ -17,6 +18,7 @@ export class FormHorComponent implements OnInit, OnChanges {
   @Input() button_text2: string = '取消';
   @Input() showCancelBt: boolean = false;
   @Input() showBottomBt: boolean = false;
+  @Input() nzLayout: string = 'vertical';
   @Output() submitForm = new EventEmitter();
   @Output() formModelChange = new EventEmitter();
   @Output() triggerFun = new EventEmitter();
@@ -24,13 +26,11 @@ export class FormHorComponent implements OnInit, OnChanges {
 
   previewImage: string | undefined = '';
   previewVisible = false;
-  constructor(private fcs: FormControlService) { }
+  constructor(private fcs: FormControlService, private publicService: PublicService) { }
   ngOnInit() { }
   ngOnChanges(simp: SimpleChanges) {
-    let that = this;
     if (simp.bfcs && simp.bfcs.currentValue) {
-      console.log('form-hor:::', that.bfcs)
-      that.form = that.fcs.toFormGroup(that.bfcs);
+      this.form = this.fcs.toFormGroup(this.bfcs);
     }
   }
   // 点击事件
@@ -45,7 +45,6 @@ export class FormHorComponent implements OnInit, OnChanges {
   }
   // 获取表单数据的方法
   getFormData() {
-    console.log('===============')
     const needData = this.form.getRawValue();
     /**这里多选框暂时没考虑校验的情况 */
     let formCheckbox: any[] = this.bfcs.filter(item => item instanceof FormCheckbox);
@@ -62,24 +61,29 @@ export class FormHorComponent implements OnInit, OnChanges {
   // cancel点击事件
   trigger(event: Event) {
     event.preventDefault();
-    this.triggerFun.emit;
+    this.triggerFun.emit();
   }
   onSubmit() {
-
-    const basket = []
+    let [validArr, filterFormData] = [[], {}];
+    /**
+     * 数据过滤
+     */
+    const filter_bfcs = this.bfcs.filter(el => !el.isHidden && !(el instanceof FormDivider) && !(el instanceof FormUpload));
+    const filer_keys = filter_bfcs.map(el => el.key);
     for (const key in this.form.controls) {
-      const item = this.form.controls[key];
-      // if(item.invalid){basket.push(item)}
-      basket.push(item.valid + key)
-      item.markAsDirty();
-      item.updateValueAndValidity();
+      if (filer_keys.includes(key)) {
+        const item = this.form.controls[key];
+        validArr.push(item.valid);
+        filterFormData[key] = item.value;
+        item.markAsDirty();
+        item.updateValueAndValidity();
+      }
     };
-    const isViald = this.form.valid;
-    const needData = this.getFormData();
-    // console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~', isViald, basket)
-    if (isViald) {
-      this.submitForm.emit(needData);
-    }
+    const isViald = validArr.every(el => el);
+
+    console.log('>>>>>>>>>>>', filterFormData)
+    if (isViald) this.submitForm.emit(filterFormData);
+
   }
   /**
    * @param 数据内部的关联，重新设置control
@@ -89,31 +93,24 @@ export class FormHorComponent implements OnInit, OnChanges {
     const item = this.bfcs[index];
     const key = item.key;
     let val = this.form.get([key]).value;
+    console.log(key)
     let modifyObj: any;
     switch (key) {
       case 'org_structure':
         this.customer_name_modify();
-        for (let i = 0, len = this.bfcs.length; i < len; i++) {
+        for (let i = 0; i < this.bfcs.length; i++) {
           const baseCtrl = this.bfcs[i];
-          switch (baseCtrl.key) {
+          switch (baseCtrl && baseCtrl.key) {
             case 'small_class':
-              /**    value: progress.values,
-                    nzOptions: progress.nzOptions,*/
-              const nzOptions: any = val == 1 ? Small_clasess.type_one : Small_clasess.type_two;
-              if (baseCtrl instanceof FormCascader) {//完成类型转换  
-                baseCtrl.nzOptions = nzOptions;
-                // TODO:重点
-                /**
-                 * 这里有一个意外，实际baseCtrl.value是有效的，成为设置的初始默认值，至于为什么是value,ant Design 官方也没说明
-                 * 推导其他无法获取默认组件设置的肯能
-                 * 也可以通过value来设置默认值
-                 * let values: any = val == 1 ? [4533] : [-1,1110]
-                 */
-                let values: any = val == 1 ? [4533] : [-1, 1110]
-                baseCtrl.value = values;  //baseCtrl.value  必须赋值一个有声明对象的参数
+              const nzOptions: any[] = val == 1 ? Small_clasess.type_one : Small_clasess.type_two;
+              /** _options:  必须这么做，绕开循环引用*/
+              const _options: any = this.publicService.copyData(nzOptions);
+              let values: any = val == 1 ? [4533] : [-1, 1110];
+              if (baseCtrl instanceof FormCascader) {
+                baseCtrl.nzOptions = _options;
+                baseCtrl.value = values;
               }
               this.form.setControl(baseCtrl.key, this.fcs.newControl(baseCtrl));
-              // this.form.setValidators
               break;
             case 'inputArg.partner_count':
               baseCtrl.label = val == 1 ? '合伙人个数' : '股东个数'
@@ -126,7 +123,7 @@ export class FormHorComponent implements OnInit, OnChanges {
             case 'inputArg.exection_count':
             case 'inputArg.GP_total_capital':
               baseCtrl.isHidden = val == 2;
-              if (baseCtrl.key != 'inputArg.org_style') baseCtrl.required = !baseCtrl.isHidden;
+              // if (baseCtrl.key != 'inputArg.org_style') baseCtrl.required = !baseCtrl.isHidden;
               break;
           }
         }
@@ -146,10 +143,10 @@ export class FormHorComponent implements OnInit, OnChanges {
         modifyObj = this.bfcs.find(el => el.key == 'businessPeriod');
         const modifyObj2 = this.bfcs.find(el => el.key == 'last_day_4_pay');
         modifyObj.isHidden = val;
-        modifyObj.required = !modifyObj.isHidden;
+        // modifyObj.required = !modifyObj.isHidden;
         this.form.setControl('businessPeriod', this.fcs.newControl(modifyObj));
         modifyObj2.isHidden = !val;
-        modifyObj2.required = !modifyObj2.isHidden;
+        // modifyObj2.required = !modifyObj2.isHidden;
         this.form.setControl('last_day_4_pay', this.fcs.newControl(modifyObj2));
         break;
       case 'customerFromSource.text':
@@ -171,7 +168,22 @@ export class FormHorComponent implements OnInit, OnChanges {
         modifyControl.value = null; //这里必须重新赋值，否则报错
         this.form.setControl(modifyObj.key, modifyControl);
         break;
-      // case ''
+      case 'R_person_id_type':   // 弹出里面的key R_person_political
+        // 原始数据 originObj
+        const originObj = item.completeData;
+        for (let i = 0, len = this.bfcs.length; i < len; i++) {
+          const target = this.bfcs[i];
+          switch (target.key) {
+            case 'R_person_race':
+            case 'R_person_political':
+            case 'R_person_education':
+              target.isHidden = val != '1';
+              if (target.isHidden) this.form.patchValue({ [target.key]: originObj[target.key] });
+          }
+
+        }
+
+        break;
     }
   }
 
@@ -193,7 +205,6 @@ export class FormHorComponent implements OnInit, OnChanges {
 
   }
   handlePreview = (file: UploadFile) => {
-    console.log('~~~~~~~~~~~~~', file)
     this.previewImage = file.url || file.thumbUrl;
 
     this.previewVisible = true;

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-immigration-parent',
-  templateUrl: './immigration-parent.component.html',
-  styleUrls: ['./immigration-parent.component.css']
+  templateUrl: '../step-html/parent/parent.component.html',
+  styleUrls: ['../step-html/parent/parent.component.css']
 })
 export class ImmigrationParentComponent implements OnInit {
   stageTwo: string = "信息";

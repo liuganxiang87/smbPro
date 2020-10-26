@@ -3,16 +3,17 @@ import { FormInputText, FormDatePicker, FormSwitch, BaseFormControls, FormRadio,
 import { CustomerInProgressModel } from '../models';
 import { bussinseLicenseReg, emailReg, phoneReg } from '../tools/global';
 import { of } from 'rxjs';
-import { MyStorageService } from './my-storage.service';
+import { PublicService } from './public.service';
+
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class FormTaskFlowTreeService {
-  constructor(private mystor: MyStorageService) { }
+  constructor(private publicService: PublicService) { }
   // 设立Form
-  getSetUpForm(progress: CustomerInProgressModel = new CustomerInProgressModel(), isDisabled: boolean = false, type: number | string = 1) {
+  getSetUpForm(progress: CustomerInProgressModel = new CustomerInProgressModel(), isDisabled: boolean = false) {
     const ngStyle = { 'background-color': '#f5f5f5', 'color': 'rgba(0,0,0,0.25)' }
     const formData: BaseFormControls<string>[] = [
       new FormRadio({
@@ -46,11 +47,10 @@ export class FormTaskFlowTreeService {
       new FormCascader({
         key: 'small_class',
         label: '企业小类别',
-        // width: '8em',
         required: true,
         isDisabled: isDisabled,
         value: progress.values,
-        nzOptions: progress.nzOptions,
+        nzOptions: this.publicService.copyData(progress.nzOptions),//   /**解决循环引用问题，现在还不明白这里bug的具体机制问题 */
         order: 3
       }),
       new FormDropdown({
@@ -294,17 +294,6 @@ export class FormTaskFlowTreeService {
         value: progress.customerPerson ? progress.customerPerson.c_person_name : '',
         order: 26
       }),
-
-      // new FormUpload({
-      //   nzAction: API.UploadFile,
-      //   label: '上传文件',
-      //   icon: 'plus',
-      //   nzFileList: [],
-      //   nzText: '上传',
-      //   nzVisible: false,
-      //   nzHeaders: { Authorization: 'Bearer ' + this.mystor.getObject(this.mystor.storKey.USER_INFO).token },
-      //   order: 27
-      // })
     ]
 
     return of(formData.sort((a, b) => a.order - b.order));
@@ -324,11 +313,12 @@ export class FormTaskFlowTreeService {
         isDisabled: isDisabled,
         order: 1
       }),
-      new FormInputText({
+      new FormTextarea({
         key: 'moveBefore.scope_of_operation',
         label: '原经营范围',
         required: true,
         isDisabled: isDisabled,
+        rows: 3,
         value: progress.moveBefore.scope_of_operation,
         order: 2
       }),
@@ -409,7 +399,7 @@ export class FormTaskFlowTreeService {
         required: true,
         isDisabled: isDisabled,
         value: progress.values,
-        nzOptions: progress.nzOptions,
+        nzOptions: this.publicService.copyData(progress.nzOptions),
         order: 9
       }),
       new FormDropdown({
@@ -679,7 +669,7 @@ export class FormTaskFlowTreeService {
         required: true,
         isDisabled: isDisabled,
         value: progress.moveBefore.values,
-        nzOptions: progress.moveBefore.nzOptions,
+        nzOptions: this.publicService.copyData(progress.moveBefore.nzOptions),
         order: 3
       }),
       new FormInputText({
@@ -690,10 +680,11 @@ export class FormTaskFlowTreeService {
         isDisabled: isDisabled,
         order: 4
       }),
-      new FormInputText({
+      new FormTextarea({
         key: 'moveBefore.scope_of_operation',
         label: '原经营范围',
         required: true,
+        rows: 3,
         isDisabled: isDisabled,
         value: progress.moveBefore.scope_of_operation,
         order: 5
@@ -782,7 +773,7 @@ export class FormTaskFlowTreeService {
         required: true,
         isDisabled: isDisabled,
         value: progress.values,
-        nzOptions: progress.nzOptions,
+        nzOptions: this.publicService.copyData(progress.nzOptions),
         order: 12
       }),
       new FormDropdown({
@@ -1030,6 +1021,4 @@ export class FormTaskFlowTreeService {
 
     return of(formData.sort((a, b) => a.order - b.order));
   }
-
-
 }

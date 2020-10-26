@@ -71,5 +71,46 @@ export class PublicService {
   copyData(o: any) {
     return JSON.parse(JSON.stringify(o))
   }
+
+
+  /*特殊字符转义*/
+  htmlspecialchars(str: string) {
+    var str = str.toString().replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, '&quot;');
+    return str;
+  }
+
+  /*
+  *获取URL参数
+  */
+  getQueryString(key: string) {
+    var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]);
+    return null;
+  }
+  // 使用用ES7的深度拷贝方法
+  deepCopy(data: any) {
+    return Object.defineProperties({}, Object.getOwnPropertyDescriptors(data));
+  }
+
+  //值复制
+  clone(obj: any) {
+    //判断是对象，就进行循环复制
+    if (typeof obj === 'object' && obj != null) {
+      // 区分是数组还是对象，创建空的数组或对象
+      var o = Object.prototype.toString.call(obj).slice(8, -1) === "Array" ? [] : {};
+      for (var k in obj) {
+        // 如果属性对应的值为对象，则递归复制
+        if (typeof obj[k] === 'object' && obj[k] != null) {
+          o[k] = this.clone(obj[k])
+        } else {
+          o[k] = obj[k];
+        }
+      }
+    } else { //不为对象，直接把值返回
+      return obj;
+    }
+    return o;
+  }
 }
 

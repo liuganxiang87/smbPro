@@ -53,6 +53,8 @@ export class PopCustomerSourceComponent implements OnInit {
   }
   handleOk() {
     // TODO:客户来源
+
+    console.log(this.fromSource.bigClass.id)
     switch (this.fromSource.bigClass.id) {
       case 1:
 
@@ -98,7 +100,7 @@ export class PopCustomerSourceComponent implements OnInit {
     if (smallClass_id) {
       this._handOk.emit(this.fromSource);
     } else {
-      this.nzNotice.warning('提示', '请选择客户来源')
+      this.nzNotice.warning('错误提示', '请您正确选择客户来源')
     }
 
   }

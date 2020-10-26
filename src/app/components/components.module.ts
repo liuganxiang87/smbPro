@@ -10,8 +10,12 @@ import { DemoComponent } from './test/test.component';
 import { SharedModule } from '../shared.module';
 import { PopCustomerSourceComponent } from './pop-customer-source/pop-customer-source.component';
 import { ChooseCustomerComponent } from './choose-customer/choose-customer.component';
-import { AddPartnerComponent } from './add-partner/add-partner/add-partner.component';
+import { AddPartnerComponent } from './add-partner/add-partner.component';
 import { FormHorPartnerComponent } from './form-hor/form-hor-partner.component';
+import { FormGridComponent } from './form-grid/form-grid.component';
+
+import { ModalRelationPersonComponent } from './modal-relation-person/modal-relation-person.component';
+import { ModalFormComponent } from './modal-form/modal-form.component';
 
 
 @NgModule({
@@ -23,7 +27,11 @@ import { FormHorPartnerComponent } from './form-hor/form-hor-partner.component';
     ChooseCustomerComponent,
     DemoComponent,
     AddPartnerComponent,
-    FormHorPartnerComponent
+    FormHorPartnerComponent,
+    FormGridComponent,
+    ModalRelationPersonComponent,
+    ModalRelationPersonComponent,
+    ModalFormComponent
   ],
   imports: [
     CommonModule,
@@ -46,6 +54,9 @@ import { FormHorPartnerComponent } from './form-hor/form-hor-partner.component';
     ChooseCustomerComponent,
     AddPartnerComponent,
     FormHorPartnerComponent,
+    FormGridComponent,
+    ModalRelationPersonComponent,
+    ModalFormComponent,
     SharedModule
   ]
 })

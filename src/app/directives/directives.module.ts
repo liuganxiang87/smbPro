@@ -4,13 +4,13 @@ import { DebounceClickDirective } from './debounceClick/debounce-click.directive
 import { DebounceInputDirective } from './inputDebounce/input-debounce.directive';
 import { BracketFormatPipe } from '../pipes/bracket-format.pipe';
 import { FilterStrAllPipe } from '../pipes/filter-str-all.pipe';
-import { DynamicComponentDirective } from './dynamicComponent/dynamic-component.directive';
+// import { DynamicComponentDirective } from './dynamicComponent/dynamic-component.directive';
 
 
 
 @NgModule({
-	declarations: [ClickStopDirective, DebounceClickDirective, DebounceInputDirective, BracketFormatPipe, FilterStrAllPipe, DynamicComponentDirective],
+	declarations: [ClickStopDirective, DebounceClickDirective, DebounceInputDirective, BracketFormatPipe, FilterStrAllPipe,],
 	imports: [],
-	exports: [ClickStopDirective, DebounceClickDirective, DebounceInputDirective, BracketFormatPipe, FilterStrAllPipe, DynamicComponentDirective]
+	exports: [ClickStopDirective, DebounceClickDirective, DebounceInputDirective, BracketFormatPipe, FilterStrAllPipe]
 })
 export class DirectivesModule { }
